@@ -1,24 +1,30 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from 'react'
+import NavBar from './components/NavBar';
+import EmployeeTable from './components/EmployeeTable'
+import { Container } from '@material-ui/core';
+import Options from './components/Options';
+import Form from './components/Form';
 
 function App() {
+
+  const [state, setState] = React.useState({
+    showAddForm: false
+  })
+
+  const showAddForm = () => {
+    state.showAddForm
+      ? setState({ showAddForm: false })
+      : setState({ showAddForm: true })
+  }
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Container maxWidth="md">
+        <NavBar />
+        <Options showAddForm={showAddForm} />
+        { state.showAddForm ? <Form /> : null }
+        <EmployeeTable />
+      </Container>
     </div>
   );
 }
