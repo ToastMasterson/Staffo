@@ -7,7 +7,7 @@ export function forbiddenCharactersMiddleware({ dispatch }) {
         return function(action) {
 
             switch(action.type) {
-                case ADD_EMPLOYEE:
+                case ADD_EMPLOYEE || UPDATE_EMPLOYEE:
                     const foundCharacter = forbiddenCharacters.filter(char => 
                         action.employee.firstName.includes(char)
                     )

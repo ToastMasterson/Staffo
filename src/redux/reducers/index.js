@@ -3,7 +3,7 @@ import { ADD_EMPLOYEE, UPDATE_EMPLOYEE } from '../constants/action-types'
 const initialState = {
     employees: [
         {
-            id: 1, 
+            id: 0, 
             firstName: 'John', 
             middleInitial: 'A', 
             lastName: 'Smith', 
@@ -11,7 +11,7 @@ const initialState = {
             startDate: 'Tue Apr 10 2010', 
             status: true
         }, {
-            id: 2, 
+            id: 1, 
             firstName: 'Timothy', 
             middleInitial: 'C', 
             lastName: 'Greene', 
@@ -19,7 +19,7 @@ const initialState = {
             startDate: 'Tue May 4 2005', 
             status: false
         }, {
-            id: 3, 
+            id: 2, 
             firstName: 'Carl', 
             middleInitial: 'M', 
             lastName: 'Edmond', 
@@ -27,7 +27,7 @@ const initialState = {
             startDate: 'Mon Nov 7 2007', 
             status: true
         }, {
-            id: 4, 
+            id: 3, 
             firstName: 'Chris', 
             middleInitial: 'L', 
             lastName: 'Traeger', 
@@ -45,6 +45,10 @@ function rootReducer(state = initialState, action) {
             const newEmployee = {id, ...action.employee}
             return Object.assign({}, state, {
                 employees: state.employees.concat(newEmployee)
+            })
+        case UPDATE_EMPLOYEE:
+            return Object.assign({}, state, {
+                employees: state.employees.map(employee => employee.id === action.employee.id ? {...action.employee}:employee)
             })
         default:
             return state

@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { addEmployee } from '../redux/actions/index'
-import { makeStyles, Paper, Button, FormGroup, FormControlLabel, Switch, TextField, Grid, Typography } from '@material-ui/core'
+import { Paper, Button, FormGroup, FormControlLabel, Switch, TextField, Grid, Typography } from '@material-ui/core'
 import { MuiPickersUtilsProvider, KeyboardDatePicker } from '@material-ui/pickers'
   import 'date-fns'
   import MomentUtils from '@date-io/moment'
@@ -59,7 +59,7 @@ class ConnectedForm extends Component {
             lastName: lastName,
             birthDate: birthDate.toDateString(),
             startDate: startDate.toDateString(),
-            status: status
+            status
          })
     }
 

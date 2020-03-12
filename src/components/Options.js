@@ -1,7 +1,7 @@
 import React from 'react'
 import { Paper, Button, FormGroup, FormControlLabel, Switch } from '@material-ui/core'
 
-const Options = ({ showAddForm }) => {
+const Options = ({ showAddForm, showActiveOnly }) => {
 
     const [state, setState] = React.useState({
         showActiveOnly: false
@@ -11,6 +11,7 @@ const Options = ({ showAddForm }) => {
         state.showActiveOnly
             ? setState({ showActiveOnly: false })
             : setState({ showActiveOnly: true})
+        showActiveOnly()
     }
 
     const handleClick = () => {

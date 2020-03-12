@@ -3,18 +3,37 @@ import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper
 import { connect } from 'react-redux'
 
 const mapStateToProps = state => {
-    return { employees: state.employees}
+    return { employees: state.employees }
 }
 
 const fullName = (employee) => {
     return employee.firstName.concat(' ', employee.middleInitial, ' ', employee.lastName)
 }
 
-const tableData = ({ employees }) => (
+const populateTable = (employees, showUpdateForm) => (
+    employees.map(employee => (
+        <TableRow style={employee.status ? {background: 'beige'} : {background: 'gray'}} key={employee.id} onClick={() => showUpdateForm(employee)}>
+            <TableCell component="th" scope="row">
+            {fullName(employee)}
+            </TableCell>
+            <TableCell align="right">
+                {employee.birthDate}
+            </TableCell>
+            <TableCell align="right">
+                {employee.startDate}
+            </TableCell>
+            <TableCell align="right">
+                {employee.status ? 'Active' : 'Inactive'}
+            </TableCell>
+        </TableRow>
+    ))
+)
+
+const tableData = ({ employees, showUpdateForm, activeOnly }) => (
     <div className="table">
         <TableContainer component={Paper}>
             <Table aria-label="employee table">
-                <TableHead>
+                <TableHead style={{background: 'lightslategrey'}}>
                     <TableRow>
                         <TableCell>Employee</TableCell>
                         <TableCell align='right'>Birth Date</TableCell>
@@ -23,22 +42,7 @@ const tableData = ({ employees }) => (
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {employees.map(employee => (
-                        <TableRow key={employee.id}>
-                            <TableCell component="th" scope="row">
-                            {fullName(employee)}
-                            </TableCell>
-                            <TableCell align="right">
-                                {employee.birthDate}
-                            </TableCell>
-                            <TableCell align="right">
-                                {employee.startDate}
-                            </TableCell>
-                            <TableCell align="right">
-                                {employee.status ? 'Active' : 'Inactive'}
-                            </TableCell>
-                        </TableRow>
-                    ))}
+                    {activeOnly ? populateTable(employees.filter(emp => emp.status === true), showUpdateForm) : populateTable(employees, showUpdateForm)}
                 </TableBody>
             </Table>
         </TableContainer>
