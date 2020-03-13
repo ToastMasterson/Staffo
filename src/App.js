@@ -1,4 +1,5 @@
 import React from 'react'
+import { connect } from 'react-redux'
 import NavBar from './components/NavBar';
 import EmployeeTable from './components/EmployeeTable'
 import { Container } from '@material-ui/core';
@@ -6,7 +7,7 @@ import Options from './components/Options';
 import Form from './components/Form';
 import UpdateForm from './components/UpdateForm'
 
-function App() {
+const App = ( { auth }) => {
 
   const [state, setState] = React.useState({
     showAddForm: false,
@@ -37,20 +38,30 @@ function App() {
     <div className="App">
       <Container maxWidth="md">
         <NavBar />
-        <Options showAddForm={showAddForm} showActiveOnly={showActiveOnly} />
-        { state.showAddForm ? <Form /> : null }
-        <EmployeeTable showUpdateForm={showUpdateForm} activeOnly={state.showActiveOnly} />
-        { state.showUpdateForm 
-          ? <UpdateForm 
-            employee={state.selectedEmployee} 
-            open={state.showUpdateForm} 
-            toggle={showUpdateForm} 
-          /> 
-          : null 
+        {!auth.isEmpty 
+          ? <><Options showAddForm={showAddForm} showActiveOnly={showActiveOnly} />
+            { state.showAddForm ? <Form /> : null }
+            <EmployeeTable showUpdateForm={showUpdateForm} activeOnly={state.showActiveOnly} />
+            { state.showUpdateForm 
+              ? <UpdateForm 
+                employee={state.selectedEmployee} 
+                open={state.showUpdateForm} 
+                toggle={showUpdateForm} 
+              /> 
+              : null 
+            }</>
+            : null
         }
+        
       </Container>
     </div>
   );
 }
 
-export default App;
+function mapStateToProps(state) {
+  return {
+    auth: state.firebaseReducer.auth
+  }
+}
+
+export default connect(mapStateToProps)(App)

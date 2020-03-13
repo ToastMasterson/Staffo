@@ -1,10 +1,18 @@
-import { createStore, applyMiddleware } from 'redux'
+import { createStore, applyMiddleware, compose } from 'redux'
 import rootReducer from '../reducers/index'
-import { forbiddenCharactersMiddleware } from '../middleware'
+import reduxThunk from 'redux-thunk'
 
-const store = createStore(
+import { reactReduxFirebase } from 'react-redux-firebase'
+import firebase from '../../firebase'
+
+const createStoreWithFirebase = compose(reactReduxFirebase(firebase))(
+    createStore
+)
+
+const store = createStoreWithFirebase(
     rootReducer,
-    applyMiddleware(forbiddenCharactersMiddleware)
+    {},
+    applyMiddleware(reduxThunk)
 )
 
 export default store
