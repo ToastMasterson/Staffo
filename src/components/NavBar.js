@@ -1,7 +1,9 @@
 import React from 'react'
-import { makeStyles, AppBar, Typography, Button, Toolbar, TextField, Grid } from '@material-ui/core'
+import { makeStyles, ThemeProvider, createMuiTheme, AppBar, Typography, Button, Toolbar, TextField, Grid } from '@material-ui/core'
 import { connect } from 'react-redux'
-import { signup, signin } from '../redux/actions/auth'
+import { signup, signin, signout } from '../redux/actions/auth'
+
+import { blue, red } from '@material-ui/core/colors'
 
 const useStyles = makeStyles(theme => ({
     appBar: {
@@ -12,10 +14,22 @@ const useStyles = makeStyles(theme => ({
     },
     login: {
         width: '70%'
+    },
+    textField:  {
+        marginRight: '5px'
     }
 }))
 
-const NavBar = () => {
+const theme = createMuiTheme({
+    palette: {
+      primary: blue,
+      secondary: {
+          main: '#bbdefb'
+      }
+    },
+  })
+
+const NavBar = ({ signup, signin, signout, auth, authMsg }) => {
     const classes = useStyles()
 
     const [state, setState] = React.useState({
@@ -24,7 +38,23 @@ const NavBar = () => {
         newUser: false
     })
 
+    React.useEffect(() => {
+        debugger
+        if (state.newUser) {
+            logIn()
+        }
+    }, [state.newUser])
+
+    const handleSignup = () => {
+        setState({ ...state, newUser: !state.newUser})
+    }
+
+    const logOut = () => {
+        signout()
+    }
+
     const logIn = () => {
+        debugger
         if (state.newUser) {
             signup(state.email, state.password)
         } else {
@@ -33,31 +63,59 @@ const NavBar = () => {
     }
 
     const handleChange = (event) => {
-        setState({ [event.target.id]: event.target.value })
+        setState({ ...state, [event.target.id]: event.target.value })
     }
 
     return (
         <div className={classes.appBar}>
-            <AppBar position='static'>
-                <Toolbar>
-                    <Typography className={classes.title}>
-                        Staffo
-                    </Typography>
-                    <Grid className={classes.login} container direction='row' justify='space-evenly'>
-                        <TextField onChange={handleChange} id='email' placeholder='Email' size='small' variant='outlined' />
-                        <TextField onChange={handleChange} id='password' placeholder='Password' size='small' variant='outlined' />
-                        <Button onClick={logIn} size='small' color="inherit">
-                            Login
-                        </Button>
-                        <Typography variant='h4'>||</Typography>
-                        <Button size='small' color='inherit'>
-                            Sign-Up
-                        </Button>
-                    </Grid>
-                </Toolbar>
-            </AppBar>
+            <ThemeProvider theme={theme}>
+                <AppBar position='static'>
+                    <Toolbar>
+                        <Typography className={classes.title}>
+                            Staffo
+                        </Typography>
+                        <Grid className={classes.login} container direction='row' justify='flex-end'>
+                            {!auth.isEmpty
+                                ? <>
+                                    <Button onClick={logOut} size='small' color='inherit'>
+                                        Logout
+                                    </Button>
+                                </>
+                                : <>
+                                    
+                                    <TextField className={classes.textField} onChange={handleChange} id='email' label='Email' size='small' variant='outlined' color='secondary' />
+                                    <TextField className={classes.textField} onChange={handleChange} id='password' label='Password' size='small' variant='outlined' color='secondary' />
+                                    <Button onClick={logIn} size='small' color="inherit">
+                                        Login
+                                    </Button>
+                                    <Typography variant='h4'>||</Typography>
+                                    <Button onClick={handleSignup} size='small' color='inherit'>
+                                        Sign-Up
+                                    </Button>
+                                </>
+                            }
+                        </Grid>
+                    </Toolbar>
+                </AppBar>
+            </ThemeProvider>
         </div>
     )
 }
 
-export default NavBar
+function mapStateToProps(state) {
+    return {
+      authMsg: state.authReducer.authMsg,
+      auth: state.firebaseReducer.auth
+    }
+  }
+
+function mapDispatchToProps(dispatch) {
+return {
+    signup: (email, password) => dispatch(signup(email, password)),
+    signin: (email, password, callback) =>
+    dispatch(signin(email, password, callback)),
+    signout: () => dispatch(signout())
+};
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(NavBar)

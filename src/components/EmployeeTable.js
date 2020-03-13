@@ -11,7 +11,7 @@ const fullName = (employee) => {
 }
 
 const populateTable = (employees, showUpdateForm) => (
-    employees.map(employee => (
+    employees.employees.map(employee => (
         <TableRow style={employee.status ? {background: 'beige'} : {background: 'gray'}} key={employee.id} onClick={() => showUpdateForm(employee)}>
             <TableCell component="th" scope="row">
             {fullName(employee)}
