@@ -7,7 +7,7 @@ const mapStateToProps = state => {
 }
 
 const fullName = (employee) => {
-    return employee.firstName.concat(' ', employee.middleInitial, ' ', employee.lastName)
+    return employee.firstName.concat(' ', employee.middleInitial, '. ', employee.lastName)
 }
 
 const populateTable = (employees, showUpdateForm) => (

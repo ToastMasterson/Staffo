@@ -1,5 +1,5 @@
 import React from 'react'
-import { makeStyles, AppBar, Typography, Button, Toolbar } from '@material-ui/core'
+import { makeStyles, AppBar, Typography, Button, Toolbar, TextField, Grid } from '@material-ui/core'
 
 const useStyles = makeStyles(theme => ({
     appBar: {
@@ -7,6 +7,9 @@ const useStyles = makeStyles(theme => ({
     },
     title: {
         flexGrow: 1
+    },
+    login: {
+        width: '60%'
     }
 }))
 
@@ -18,11 +21,15 @@ const NavBar = () => {
             <AppBar position='static'>
                 <Toolbar>
                     <Typography className={classes.title}>
-                        Staff-o
+                        Staffo
                     </Typography>
-                    <Button color="inherit">
-                        Login
-                    </Button>
+                    <Grid className={classes.login} container direction='row' justify='space-evenly'>
+                        <TextField id='email' placeholder='Email' size='small' variant='outlined' />
+                        <TextField id='password' placeholder='Password' size='small' variant='outlined' />
+                        <Button size='small' color="inherit">
+                            Login
+                        </Button>
+                    </Grid>
                 </Toolbar>
             </AppBar>
         </div>
