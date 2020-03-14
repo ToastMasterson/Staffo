@@ -14,9 +14,13 @@ const populateTable = (employees, showUpdateForm, activeOnly) => {
     const dispayedEmployees = activeOnly ? employees.employees.filter(emp => emp.status === true) : employees.employees
     return (
         dispayedEmployees.map(employee => (
-            <TableRow style={employee.status ? {background: 'beige'} : {background: 'gray'}} key={employee.id} onClick={() => showUpdateForm(employee)}>
+            <TableRow 
+                hover
+                key={employee.id} 
+                onClick={() => showUpdateForm(employee)}
+            >
                 <TableCell component="th" scope="row">
-                {fullName(employee)}
+                    {fullName(employee)}
                 </TableCell>
                 <TableCell align="right">
                     {employee.birthDate}
@@ -24,7 +28,7 @@ const populateTable = (employees, showUpdateForm, activeOnly) => {
                 <TableCell align="right">
                     {employee.startDate}
                 </TableCell>
-                <TableCell align="right">
+                <TableCell align="right" style={ employee.status ? null : {color: 'red'} }>
                     {employee.status ? 'Active' : 'Inactive'}
                 </TableCell>
             </TableRow>
@@ -33,7 +37,6 @@ const populateTable = (employees, showUpdateForm, activeOnly) => {
 }
 
 const tableData = ({ employees, showUpdateForm, activeOnly }) => {
-    debugger
     return(
     <div className="table">
         <TableContainer component={Paper}>

@@ -3,7 +3,7 @@ import { makeStyles, ThemeProvider, createMuiTheme, AppBar, Typography, Button, 
 import { connect } from 'react-redux'
 import { signup, signin, signout } from '../redux/actions/auth'
 
-import { blue, red } from '@material-ui/core/colors'
+import { blue } from '@material-ui/core/colors'
 
 const useStyles = makeStyles(theme => ({
     appBar: {

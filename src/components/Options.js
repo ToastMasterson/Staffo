@@ -1,5 +1,5 @@
 import React from 'react'
-import { Paper, Button, FormGroup, FormControlLabel, Switch } from '@material-ui/core'
+import { Paper, Button, FormControlLabel, Switch, Grid } from '@material-ui/core'
 
 const Options = ({ showAddForm, showActiveOnly }) => {
 
@@ -20,8 +20,8 @@ const Options = ({ showAddForm, showActiveOnly }) => {
 
     return (
         <div className='options'>
-            <Paper>
-                <FormGroup row>
+            <Paper style={{margin: '10px', padding: '10px'}}>
+                <Grid container>
                     <FormControlLabel 
                         control={
                             <Switch checked={state.showActiveOnly} onChange={handleToggle} value='showActiveOnly' />
@@ -29,10 +29,10 @@ const Options = ({ showAddForm, showActiveOnly }) => {
                         label='Show Active Only'
                     >
                     </FormControlLabel>
-                    <Button variant='contained' onClick={handleClick}>
+                    <Button variant='contained' onClick={handleClick} size='small'>
                         Add Employee
                     </Button>
-                </FormGroup>
+                </Grid>
             </Paper>
         </div>
     )
