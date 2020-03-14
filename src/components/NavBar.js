@@ -39,7 +39,6 @@ const NavBar = ({ signup, signin, signout, auth, authMsg }) => {
     })
 
     React.useEffect(() => {
-        debugger
         if (state.newUser) {
             logIn()
         }
@@ -54,7 +53,6 @@ const NavBar = ({ signup, signin, signout, auth, authMsg }) => {
     }
 
     const logIn = () => {
-        debugger
         if (state.newUser) {
             signup(state.email, state.password)
         } else {

@@ -10,26 +10,31 @@ const fullName = (employee) => {
     return employee.firstName.concat(' ', employee.middleInitial, '. ', employee.lastName)
 }
 
-const populateTable = (employees, showUpdateForm) => (
-    employees.employees.map(employee => (
-        <TableRow style={employee.status ? {background: 'beige'} : {background: 'gray'}} key={employee.id} onClick={() => showUpdateForm(employee)}>
-            <TableCell component="th" scope="row">
-            {fullName(employee)}
-            </TableCell>
-            <TableCell align="right">
-                {employee.birthDate}
-            </TableCell>
-            <TableCell align="right">
-                {employee.startDate}
-            </TableCell>
-            <TableCell align="right">
-                {employee.status ? 'Active' : 'Inactive'}
-            </TableCell>
-        </TableRow>
-    ))
-)
+const populateTable = (employees, showUpdateForm, activeOnly) => {
+    const dispayedEmployees = activeOnly ? employees.employees.filter(emp => emp.status === true) : employees.employees
+    return (
+        dispayedEmployees.map(employee => (
+            <TableRow style={employee.status ? {background: 'beige'} : {background: 'gray'}} key={employee.id} onClick={() => showUpdateForm(employee)}>
+                <TableCell component="th" scope="row">
+                {fullName(employee)}
+                </TableCell>
+                <TableCell align="right">
+                    {employee.birthDate}
+                </TableCell>
+                <TableCell align="right">
+                    {employee.startDate}
+                </TableCell>
+                <TableCell align="right">
+                    {employee.status ? 'Active' : 'Inactive'}
+                </TableCell>
+            </TableRow>
+        ))
+    )
+}
 
-const tableData = ({ employees, showUpdateForm, activeOnly }) => (
+const tableData = ({ employees, showUpdateForm, activeOnly }) => {
+    debugger
+    return(
     <div className="table">
         <TableContainer component={Paper}>
             <Table aria-label="employee table">
@@ -42,12 +47,12 @@ const tableData = ({ employees, showUpdateForm, activeOnly }) => (
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {activeOnly ? populateTable(employees.filter(emp => emp.status === true), showUpdateForm) : populateTable(employees, showUpdateForm)}
+                    {populateTable(employees, showUpdateForm, activeOnly)}
                 </TableBody>
             </Table>
         </TableContainer>
-    </div>
-)
+    </div>)
+}
 
 const EmployeeTable = connect(mapStateToProps)(tableData)
 
