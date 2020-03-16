@@ -1,13 +1,17 @@
-Tasks:
+This is Staffo, a simple staff management app.
 
-    //debug
-        - Employees object in state
-            -- Throws error on toggle
+Visit the app here: https://staffo-28e39.firebaseapp.com/
 
-    //write tests and validations
+Upon landing, you can enter an email and password and click sign up, or you can click log in if you already created one.
 
-    //refactor
+The UI will load.
 
-    //add popups
+You have options to filter out active employees only by clicking the toggle button.
 
-    //deploy
+You can add a new employee using the form presented after clicking "Add Employee".
+
+You can select an employee and edit their credentials.
+
+Log out when you're finished.
+
+Thank you for checking this app out.
