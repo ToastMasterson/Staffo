@@ -46,13 +46,13 @@ const UpdateForm = (props) => {
     const handleBirthDateChange = (date) => {
         date === null
             ? setState({ birthDate: new Date().toDateString()})
-            : setState({ birthDate: date._d })
+            : setState({ birthDate: date._d.toDateString() })
     }
 
     const handleStartDateChange = (date) => {
         date === null
             ? setState({ startDate: new Date().toDateString()})
-            : setState({ startDate: date._d })
+            : setState({ startDate: date._d.toDateString() })
     }
     
     const handleToggle = (event) => {

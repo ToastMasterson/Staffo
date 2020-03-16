@@ -1,4 +1,4 @@
-export const apiUrl = 'https://staffo.herokuapp.com'
+export const apiUrl = 'http://localhost:8000'
 
 export const validationHeader = { ...{'Content-Type': 'application/json'}}
 

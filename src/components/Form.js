@@ -38,13 +38,13 @@ class ConnectedForm extends Component {
     handleBirthDateChange(date) {
         date === null
             ? this.setState({ birthDate: new Date().toDateString()})
-            : this.setState({ birthDate: date._d })
+            : this.setState({ birthDate: date._d.toDateString() })
     }
 
     handleStartDateChange(date) {
         date === null
-            ? this.setState({ startDate: date._d })
-            : this.setState({ startDate: date._d })
+            ? this.setState({ startDate: new Date().toDateString() })
+            : this.setState({ startDate: date._d.toDateString() })
     }
 
     handleToggle(event) {
