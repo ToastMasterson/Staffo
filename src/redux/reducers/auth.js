@@ -5,7 +5,7 @@ import {
     SIGNIN_ERROR,
     SIGNOUT_SUCCESS,
     SIGNOUT_ERROR
-  } from "../constants/action-types";
+} from "../constants/action-types";
   
   const INITIAL_STATE = {
     authMsg: ""

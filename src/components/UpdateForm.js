@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { updateEmployee } from '../redux/actions/index'
+import { employeeActions } from '../redux/actions/index'
 import { makeStyles, Modal, Backdrop, Fade, FormGroup, Grid, TextField, Typography, Switch, Button } from '@material-ui/core'
 import { MuiPickersUtilsProvider, KeyboardDatePicker } from '@material-ui/pickers'
 import MomentUtils from '@date-io/moment'
@@ -22,7 +22,7 @@ const useStyles = makeStyles(theme => ({
 
 const mapDispatchToProps = dispatch => {
     return {
-        updateEmployee: employee => dispatch(updateEmployee(employee))
+        updateEmployee: employee => employeeActions.updateEmployee(employee, dispatch)
     }
 }
 
@@ -43,8 +43,16 @@ const UpdateForm = (props) => {
         setState({ ...state, [event.target.id]: event.target.value })
     }
 
-    const handleDateChange = (date) => {
-        setState({ ...state, birthDate: date._d.toDateString() })
+    const handleBirthDateChange = (date) => {
+        date === null
+            ? setState({ birthDate: new Date().toDateString()})
+            : setState({ birthDate: date._d })
+    }
+
+    const handleStartDateChange = (date) => {
+        date === null
+            ? setState({ startDate: new Date().toDateString()})
+            : setState({ startDate: date._d })
     }
     
     const handleToggle = (event) => {
@@ -122,8 +130,8 @@ const UpdateForm = (props) => {
                                 id="birthDate"
                                 label="Date of Birth"
                                 format="MM/DD/YYYY"
-                                value={state.birthDate}
-                                onChange={handleDateChange}
+                                value={props.employee.birthDate}
+                                onChange={handleBirthDateChange}
                                 KeyboardButtonProps={{
                                   'aria-label': 'change date',
                                 }}
@@ -133,8 +141,8 @@ const UpdateForm = (props) => {
                                 id="startDate"
                                 label="Date of Employment"
                                 format="MM/DD/YYYY"
-                                value={state.startDate}
-                                onChange={handleChange}
+                                value={props.employee.startDate}
+                                onChange={handleStartDateChange}
                                 KeyboardButtonProps={{
                                   'aria-label': 'change date',
                                 }}

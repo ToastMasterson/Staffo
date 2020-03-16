@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { addEmployee } from '../redux/actions/index'
+import { employeeActions } from '../redux/actions/index'
 import { Paper, Button, FormGroup, Switch, TextField, Grid, Typography } from '@material-ui/core'
 import { MuiPickersUtilsProvider, KeyboardDatePicker } from '@material-ui/pickers'
   import 'date-fns'
@@ -8,7 +8,7 @@ import { MuiPickersUtilsProvider, KeyboardDatePicker } from '@material-ui/picker
 
 function mapDispatchToProps(dispatch) {
     return {
-        addEmployee: employee => dispatch(addEmployee(employee))
+        addEmployee: employee => employeeActions.addEmployee(employee, dispatch)
     }
 }
 
@@ -19,23 +19,32 @@ class ConnectedForm extends Component {
             firstName: '',
             middleInitial: '',
             lastName: '',
-            birthDate: new Date(),
-            startDate: new Date(),
+            birthDate: new Date().toDateString(),
+            startDate: new Date().toDateString(),
             status: true,
             isActive: true
         }
         this.handleChange = this.handleChange.bind(this)
         this.handleSubmit = this.handleSubmit.bind(this)
         this.handleToggle = this.handleToggle.bind(this)
-        this.handleDateChange = this.handleDateChange.bind(this)
+        this.handleBirthDateChange = this.handleBirthDateChange.bind(this)
+        this.handleStartDateChange = this.handleStartDateChange.bind(this)
     }
 
     handleChange(event) {
         this.setState({ [event.target.id]: event.target.value })
     }
 
-    handleDateChange(date) {
-        this.setState({ birthDate: date._d })
+    handleBirthDateChange(date) {
+        date === null
+            ? this.setState({ birthDate: new Date().toDateString()})
+            : this.setState({ birthDate: date._d })
+    }
+
+    handleStartDateChange(date) {
+        date === null
+            ? this.setState({ startDate: date._d })
+            : this.setState({ startDate: date._d })
     }
 
     handleToggle(event) {
@@ -49,8 +58,8 @@ class ConnectedForm extends Component {
             firstName, 
             middleInitial, 
             lastName, 
-            birthDate: birthDate.toDateString(), 
-            startDate: startDate.toDateString(), 
+            birthDate: birthDate, 
+            startDate: startDate, 
             status 
         })
         this.setState({ 
@@ -78,7 +87,7 @@ class ConnectedForm extends Component {
                                 label="Date of Birth"
                                 format="MM/DD/YYYY"
                                 value={this.state.birthDate}
-                                onChange={this.handleDateChange}
+                                onChange={this.handleBirthDateChange}
                                 KeyboardButtonProps={{
                                   'aria-label': 'change date',
                                 }}
@@ -89,7 +98,7 @@ class ConnectedForm extends Component {
                                 label="Date of Employment"
                                 format="MM/DD/YYYY"
                                 value={this.state.startDate}
-                                onChange={this.handleChange}
+                                onChange={this.handleStartDateChange}
                                 KeyboardButtonProps={{
                                   'aria-label': 'change date',
                                 }}
