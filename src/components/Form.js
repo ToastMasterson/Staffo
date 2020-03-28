@@ -3,8 +3,8 @@ import { connect } from 'react-redux'
 import { employeeActions } from '../redux/actions/index'
 import { Paper, Button, FormGroup, Switch, TextField, Grid, Typography } from '@material-ui/core'
 import { MuiPickersUtilsProvider, KeyboardDatePicker } from '@material-ui/pickers'
-  import 'date-fns'
-  import MomentUtils from '@date-io/moment'
+import 'date-fns'
+import MomentUtils from '@date-io/moment'
 
 function mapDispatchToProps(dispatch) {
     return {

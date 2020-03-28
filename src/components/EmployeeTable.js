@@ -11,7 +11,7 @@ class EmployeeTable extends Component {
     }
 
     fullName = (employee) => (
-        employee.firstName + ' ' + employee.middleInitial + '. ' + employee.lastName
+        employee.firstName + ' ' + employee.middleInitial + ' ' + employee.lastName
     )
 
     populateTable = (employees, pending) => {
@@ -64,7 +64,7 @@ class EmployeeTable extends Component {
                                 <TableCell align='right'>Status</TableCell>
                             </TableRow>
                         </TableHead>
-                        <TableBody>
+                        <TableBody style={{ cursor: 'pointer' }}>
                             {this.props.activeOnly 
                                 ? this.populateTable(employees.filter(emp => emp.status === true), pending) 
                                 : this.populateTable(employees, pending)
