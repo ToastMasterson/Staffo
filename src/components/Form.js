@@ -1,8 +1,9 @@
-import React, { Component } from 'react'
+import React from 'react'
 import { connect } from 'react-redux'
 import { employeeActions } from '../redux/actions/index'
 import { Paper, Button, FormGroup, Switch, TextField, Grid, Typography } from '@material-ui/core'
 import { MuiPickersUtilsProvider, KeyboardDatePicker } from '@material-ui/pickers'
+import { useForm } from 'react-hook-form'
 import 'date-fns'
 import MomentUtils from '@date-io/moment'
 
@@ -12,109 +13,138 @@ function mapDispatchToProps(dispatch) {
     }
 }
 
-class ConnectedForm extends Component {
-    constructor(props) {
-        super(props)
-        this.state = {
-            firstName: '',
-            middleInitial: '',
-            lastName: '',
-            birthDate: new Date().toDateString(),
-            startDate: new Date().toDateString(),
-            status: true,
-            isActive: true
-        }
-        this.handleChange = this.handleChange.bind(this)
-        this.handleSubmit = this.handleSubmit.bind(this)
-        this.handleToggle = this.handleToggle.bind(this)
-        this.handleBirthDateChange = this.handleBirthDateChange.bind(this)
-        this.handleStartDateChange = this.handleStartDateChange.bind(this)
+const ConnectedForm = (props) => {
+    const { register, handleSubmit, watch, errors } = useForm()
+
+    const [state, setState] = React.useState({
+        firstName: '',
+        middleInitial: '',
+        lastName: '',
+        birthDate: new Date().toDateString(),
+        startDate: new Date().toDateString(),
+        status: true,
+        isActive: true
+    })
+
+    const handleChange = (event) => {
+        setState({ ...state, [event.target.id]: event.target.value })
     }
 
-    handleChange(event) {
-        this.setState({ [event.target.id]: event.target.value })
-    }
-
-    handleBirthDateChange(date) {
+    const handleBirthDateChange = (date) => {
         date === null
-            ? this.setState({ birthDate: new Date().toDateString()})
-            : this.setState({ birthDate: date._d.toDateString() })
+            ? setState({...state, birthDate: new Date().toDateString()})
+            : setState({...state,birthDate: date._d.toDateString() })
     }
 
-    handleStartDateChange(date) {
+    const handleStartDateChange = (date) => {
         date === null
-            ? this.setState({ startDate: new Date().toDateString() })
-            : this.setState({ startDate: date._d.toDateString() })
+            ? setState({...state, startDate: new Date().toDateString()})
+            : setState({...state, startDate: date._d.toDateString() })
     }
 
-    handleToggle(event) {
-        this.setState({ isActive: event.target.checked })
+    const handleToggle = (event) => {
+        setState({ ...state, status: event.target.checked })
     }
 
-    handleSubmit(event) {
-        event.preventDefault()
-        const { firstName, middleInitial, lastName, birthDate, startDate, status } = this.state
-        this.props.addEmployee({ 
+    const handleUpdateSubmit = () => {
+        const { id, firstName, middleInitial, lastName, birthDate, startDate, status } = state
+        props.addEmployee({ 
+            id,
             firstName, 
             middleInitial, 
             lastName, 
-            birthDate: birthDate, 
-            startDate: startDate, 
+            birthDate, 
+            startDate, 
             status 
         })
-        this.setState({ 
+        setState({ 
             firstName: firstName,
             middleInitial: middleInitial,
             lastName: lastName,
-            birthDate: birthDate.toDateString(),
-            startDate: startDate.toDateString(),
-            status
+            birthDate: birthDate,
+            startDate: startDate,
+            status: status
          })
+        props.toggle()
     }
 
-    render() {
-        return (
-            <Paper style={{ padding: '20px'}}>
-                <FormGroup>
-                    <Grid container justify='space-evenly' style={{ width: '80%', margin: 'auto'}}>
-                        <TextField onChange={this.handleChange} required id='firstName' label='First Name' defaultValue='First Name' variant='outlined' size='small' />
-                        <TextField onChange={this.handleChange} id='middleInitial' label='M.I.' defaultValue='M' variant='outlined' size='small' />
-                        <TextField onChange={this.handleChange} required id='lastName' label='Last Name' defaultValue='Last Name' variant='outlined' size='small' />
-                        <MuiPickersUtilsProvider utils={MomentUtils}>
-                            <KeyboardDatePicker
-                                margin="normal"
-                                id="birthDate"
-                                label="Date of Birth"
-                                format="MM/DD/YYYY"
-                                value={this.state.birthDate}
-                                onChange={this.handleBirthDateChange}
-                                KeyboardButtonProps={{
-                                  'aria-label': 'change date',
-                                }}
-                            />
-                            <KeyboardDatePicker
-                                margin="normal"
-                                id="startDate"
-                                label="Date of Employment"
-                                format="MM/DD/YYYY"
-                                value={this.state.startDate}
-                                onChange={this.handleStartDateChange}
-                                KeyboardButtonProps={{
-                                  'aria-label': 'change date',
-                                }}
-                            />
-                            <Grid item container direction='row' xs={6}>
-                                <Typography>Inactive</Typography>
-                                <Switch checked={this.state.isActive} onChange={this.handleToggle} value='isActive' />
-                                <Typography>Active</Typography>
-                            </Grid>
-                            <Button onClick={this.handleSubmit} variant='contained' color='primary'>Save Employee</Button>
-                        </MuiPickersUtilsProvider>
-                    </Grid>
-                </FormGroup>
-            </Paper>
-        )
-    }
+    return (
+        <Paper style={{ padding: '20px'}}>
+            <FormGroup>
+                <Grid container justify='space-evenly' style={{ width: '80%', margin: 'auto'}}>
+                <TextField 
+                        error={ errors.firstName ? true : false }
+                        inputRef={ register({ required: true, maxLength: 50, minLength: 1 })} 
+                        onChange={handleChange} 
+                        required 
+                        name='firstName'
+                        id='firstName' 
+                        label='First Name' 
+                        defaultValue='First Name' 
+                        variant='outlined' 
+                        size='small' 
+                    />
+                    <TextField 
+                        error={ errors.middleInitial ? true : false }
+                        inputRef={ register({ maxLength: 1 })} 
+                        onChange={handleChange} 
+                        name='middleInitial'
+                        id='middleInitial' 
+                        label='M.I.' 
+                        defaultValue='M.I.' 
+                        variant='outlined' 
+                        size='small' 
+                    />
+                    <TextField 
+                        error={ errors.lastName ? true : false }
+                        inputRef={ register({ required: true, maxLength: 50, minLength: 1 })} 
+                        onChange={handleChange} 
+                        required 
+                        name='lastName'
+                        id='lastName' 
+                        label='Last Name' 
+                        defaultValue='Last Name'
+                        variant='outlined' 
+                        size='small' 
+                    />
+                    <MuiPickersUtilsProvider utils={MomentUtils}>
+                        <KeyboardDatePicker
+                            error={ errors.birthDate ? true : false }
+                            inputRef={ register({ required: true })} 
+                            margin="normal"
+                            id="birthDate"
+                            label="Date of Birth"
+                            format="MM/DD/YYYY"
+                            value={state.birthDate}
+                            onChange={handleBirthDateChange}
+                            KeyboardButtonProps={{
+                                'aria-label': 'change date',
+                            }}
+                        />
+                        <KeyboardDatePicker
+                            error={ errors.startDate ? true : false }
+                            inputRef={ register({ required: true })} 
+                            margin="normal"
+                            id="startDate"
+                            label="Date of Employment"
+                            format="MM/DD/YYYY"
+                            value={state.startDate}
+                            onChange={handleStartDateChange}
+                            KeyboardButtonProps={{
+                                'aria-label': 'change date',
+                            }}
+                        />
+                        <Grid item container direction='row' xs={6}>
+                            <Typography>Inactive</Typography>
+                            <Switch checked={state.status} onChange={handleToggle} value='isActive' />
+                            <Typography>Active</Typography>
+                        </Grid>
+                        <Button onClick={handleSubmit(handleUpdateSubmit)} variant='contained' color='primary'>Save Employee</Button>
+                    </MuiPickersUtilsProvider>
+                </Grid>
+            </FormGroup>
+        </Paper>
+    )
 }
 
 const Form = connect(null, mapDispatchToProps)(ConnectedForm)
