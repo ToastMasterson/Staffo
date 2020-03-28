@@ -12,7 +12,6 @@ const addEmployee = (employee, dispatch) => {
 }
 
 const updateEmployee = (employee, dispatch) => {
-    debugger
     fetch(`${helpers.apiUrl}/api/employees/${employee.id}`, helpers.updateOptions(employee))
         .then(helpers.handleResponse)
         .then(employee => dispatch({type: UPDATE_EMPLOYEE, employee}))

@@ -24,7 +24,6 @@ export default function employees(state = initialState, action) {
                 employees: state.employees.concat(newEmployee)
             })
         case UPDATE_EMPLOYEE:
-            debugger
             return Object.assign({}, state, {
                 employees: state.employees.map(employee => employee.id === action.employee.id ? {...action.employee}:employee)
             })

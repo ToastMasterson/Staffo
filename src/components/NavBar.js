@@ -33,7 +33,7 @@ const theme = createMuiTheme({
 
 const NavBar = ({ signup, signin, signout, auth, authMsg }) => {
     const classes = useStyles()
-    const { register, handleSubmit, watch, errors } = useForm()
+    const { register, handleSubmit, errors } = useForm()
 
     const [state, setState] = React.useState({
         email: '',

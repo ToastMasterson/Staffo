@@ -105,6 +105,7 @@ const UpdateForm = (props) => {
                             inputRef={ register({ required: true, maxLength: 50, minLength: 1 })} 
                             onChange={handleChange} 
                             required 
+                            name='firstName'
                             id='firstName' 
                             label='First Name' 
                             defaultValue={state.firstName} 
@@ -115,6 +116,7 @@ const UpdateForm = (props) => {
                             error={ errors.middleInitial ? true : false }
                             inputRef={ register({ maxLength: 1 })} 
                             onChange={handleChange} 
+                            name='middleInitial'
                             id='middleInitial' 
                             label='M.I.' 
                             defaultValue={state.middleInitial} 
@@ -126,6 +128,7 @@ const UpdateForm = (props) => {
                             inputRef={ register({ required: true, maxLength: 50, minLength: 1 })} 
                             onChange={handleChange} 
                             required 
+                            name='lastName'
                             id='lastName' 
                             label='Last Name' 
                             defaultValue={state.lastName}
