@@ -1,7 +1,9 @@
 import React from 'react'
-import { makeStyles, ThemeProvider, createMuiTheme, AppBar, Typography, Button, Toolbar, TextField, Grid } from '@material-ui/core'
+import { makeStyles, ThemeProvider, createMuiTheme, AppBar, Typography, Button, Toolbar, TextField, Grid, Input } from '@material-ui/core'
 import { connect } from 'react-redux'
 import { signup, signin, signout } from '../redux/actions/auth'
+
+import { useForm } from 'react-hook-form'
 
 import { blue } from '@material-ui/core/colors'
 
@@ -31,6 +33,7 @@ const theme = createMuiTheme({
 
 const NavBar = ({ signup, signin, signout, auth, authMsg }) => {
     const classes = useStyles()
+    const { register, handleSubmit, watch, errors } = useForm()
 
     const [state, setState] = React.useState({
         email: '',
@@ -80,10 +83,27 @@ const NavBar = ({ signup, signin, signout, auth, authMsg }) => {
                                     </Button>
                                 </>
                                 : <>
-                                    
-                                    <TextField className={classes.textField} onChange={handleChange} id='email' label='Email' size='small' variant='outlined' color='secondary' />
-                                    <TextField className={classes.textField} onChange={handleChange} id='password' label='Password' size='small' variant='outlined' color='secondary' />
-                                    <Button onClick={logIn} size='small' color="inherit">
+                                    <TextField 
+                                        error={ errors.email ? true : false } 
+                                        className={classes.textField} 
+                                        inputRef={ register({ required: true, maxLength: 50 })} 
+                                        onChange={ handleChange } 
+                                        name='email' 
+                                        id='email' 
+                                        label={ errors.email ? "Email Required" : 'Email' } 
+                                        size='small' variant='outlined' color='secondary' 
+                                    />
+                                    <TextField 
+                                        error={ errors.password ? true : false } 
+                                        className={classes.textField} 
+                                        inputRef={ register({ required: true, maxLength: 20 })}
+                                        onChange={handleChange} 
+                                        name='password'
+                                        id='password' 
+                                        label={ errors.password ? 'Password Required' : 'Password' }
+                                        size='small' variant='outlined' color='secondary' 
+                                    />
+                                    <Button onClick={handleSubmit(logIn)} size='small' color="inherit">
                                         Login
                                     </Button>
                                     <Typography variant='h4'>||</Typography>

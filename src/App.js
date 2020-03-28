@@ -61,6 +61,7 @@ const App = ( { auth }) => {
 function mapStateToProps(state) {
   return {
     auth: state.firebaseReducer.auth,
+    authMsg: state.authReducer.authMsg
   }
 }
 
