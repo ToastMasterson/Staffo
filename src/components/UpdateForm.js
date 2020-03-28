@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import { employeeActions } from '../redux/actions/index'
 import { makeStyles, Modal, Backdrop, Fade, FormGroup, Grid, TextField, Typography, Switch, Button } from '@material-ui/core'
 import { MuiPickersUtilsProvider, KeyboardDatePicker } from '@material-ui/pickers'
+import { useForm } from 'react-hook-form'
 import MomentUtils from '@date-io/moment'
 
 const useStyles = makeStyles(theme => ({
@@ -28,6 +29,7 @@ const mapDispatchToProps = dispatch => {
 
 const UpdateForm = (props) => {
     const classes = useStyles()
+    const { register, handleSubmit, watch, errors } = useForm()
 
     const [state, setState] = React.useState({
         id: props.employee.id,
@@ -59,7 +61,7 @@ const UpdateForm = (props) => {
         setState({ ...state, status: event.target.checked })
     }
 
-    const handleSubmit = () => {
+    const handleUpdateSubmit = () => {
         const { id, firstName, middleInitial, lastName, birthDate, startDate, status } = state
         props.updateEmployee({ 
             id,
@@ -99,6 +101,8 @@ const UpdateForm = (props) => {
                 <FormGroup>
                     <Grid container justify='space-evenly' style={{ width: '80%', margin: 'auto'}}>
                         <TextField 
+                            error={ errors.firstName ? true : false }
+                            inputRef={ register({ required: true, maxLength: 50, minLength: 1 })} 
                             onChange={handleChange} 
                             required 
                             id='firstName' 
@@ -108,6 +112,8 @@ const UpdateForm = (props) => {
                             size='small' 
                         />
                         <TextField 
+                            error={ errors.middleInitial ? true : false }
+                            inputRef={ register({ maxLength: 1 })} 
                             onChange={handleChange} 
                             id='middleInitial' 
                             label='M.I.' 
@@ -116,6 +122,8 @@ const UpdateForm = (props) => {
                             size='small' 
                         />
                         <TextField 
+                            error={ errors.lastName ? true : false }
+                            inputRef={ register({ required: true, maxLength: 50, minLength: 1 })} 
                             onChange={handleChange} 
                             required 
                             id='lastName' 
@@ -126,6 +134,8 @@ const UpdateForm = (props) => {
                         />
                         <MuiPickersUtilsProvider utils={MomentUtils}>
                             <KeyboardDatePicker
+                                error={ errors.birthDate ? true : false }
+                                inputRef={ register({ required: true })} 
                                 margin="normal"
                                 id="birthDate"
                                 label="Date of Birth"
@@ -137,6 +147,8 @@ const UpdateForm = (props) => {
                                 }}
                             />
                             <KeyboardDatePicker
+                                error={ errors.startDate ? true : false }
+                                inputRef={ register({ required: true })} 
                                 margin="normal"
                                 id="startDate"
                                 label="Date of Employment"
@@ -152,7 +164,7 @@ const UpdateForm = (props) => {
                                 <Switch checked={state.status} onChange={handleToggle} value='isActive' />
                                 <Typography>Active</Typography>
                             </Grid>
-                            <Button onClick={handleSubmit} variant='contained' color='primary'>Save Employee</Button>
+                            <Button onClick={handleSubmit(handleUpdateSubmit)} variant='contained' color='primary'>Save Employee</Button>
                         </MuiPickersUtilsProvider>
                     </Grid>
                 </FormGroup>
