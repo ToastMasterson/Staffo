@@ -41,7 +41,6 @@ const NavBar = ({ signup, signin, signout, auth, authMsg }) => {
     const classes = useStyles()
     const { register, handleSubmit, errors } = useForm()
     let errorsArray = Object.values(errors)
-    debugger
     const [state, setState] = React.useState({
         email: '',
         password: '',
@@ -53,7 +52,8 @@ const NavBar = ({ signup, signin, signout, auth, authMsg }) => {
         if (state.newUser) {
             logIn()
         }
-    }, [state.newUser])
+        setState({ sbOpen: true })
+    }, [state.newUser, errors])
 
     const handleSignup = () => {
         setState({ ...state, newUser: !state.newUser})
@@ -142,7 +142,7 @@ const NavBar = ({ signup, signin, signout, auth, authMsg }) => {
                                         Login
                                     </Button>
                                     <Typography variant='h4'>||</Typography>
-                                    <Button onClick={handleSignup} size='small' color='inherit'>
+                                    <Button onClick={handleSubmit(handleSignup)} size='small' color='inherit'>
                                         Sign-Up
                                     </Button>
                                 </>
@@ -151,11 +151,11 @@ const NavBar = ({ signup, signin, signout, auth, authMsg }) => {
                         {errorsArray.length > 0
                             ?   <Snackbar 
                                     open={state.sbOpen}
-                                    autoHideDuration={4000} 
+                                    autoHideDuration={3000} 
                                     onClose={handleSBClose}
                                     anchorOrigin={{ vertical: 'top', horizontal: 'left' }}
                                 >
-                                    <Alert onClose={handleSBClose} severity="error">
+                                    <Alert severity="error">
                                         <div style={{ display: 'flex', flexFlow: 'column', alignItems: 'center' }}>
                                         { handleSnackbar(errors) }
                                         </div>
