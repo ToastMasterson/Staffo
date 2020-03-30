@@ -2,10 +2,11 @@ import React from 'react'
 import { connect } from 'react-redux'
 import NavBar from './components/NavBar';
 import EmployeeTable from './components/EmployeeTable'
-import { Container } from '@material-ui/core';
+import { Container, Snackbar, Alert } from '@material-ui/core';
 import Options from './components/Options';
 import Form from './components/Form';
 import UpdateForm from './components/UpdateForm'
+import Welcome from './components/Welcome';
 
 const App = ( { auth }) => {
 
@@ -50,7 +51,7 @@ const App = ( { auth }) => {
               /> 
               : null 
             }</>
-            : null
+            : <Welcome />
         }
         
       </Container>
