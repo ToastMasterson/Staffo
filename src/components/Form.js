@@ -17,7 +17,6 @@ function mapDispatchToProps(dispatch) {
 const ConnectedForm = (props) => {
     const { register, handleSubmit, watch, errors } = useForm()
     const errorsArray = Object.values(errors).map(error => error.message)
-    debugger
     const [state, setState] = React.useState({
         firstName: '',
         middleInitial: '',
@@ -64,7 +63,7 @@ const ConnectedForm = (props) => {
         setState({ ...state, sbOpen: false })
     }
 
-    const handleUpdateSubmit = () => {
+    const handleAddSubmit = () => {
         const { id, firstName, middleInitial, lastName, birthDate, startDate, status } = state
         props.addEmployee({ 
             id,
@@ -197,7 +196,7 @@ const ConnectedForm = (props) => {
                             <Switch checked={state.status} onChange={handleToggle} value='isActive' />
                             <Typography>Active</Typography>
                         </Grid>
-                        <Button onClick={handleSubmit(handleUpdateSubmit)} variant='contained' color='primary'>Save Employee</Button>
+                        <Button onClick={handleSubmit(handleAddSubmit)} variant='contained' color='primary'>Save Employee</Button>
                     </MuiPickersUtilsProvider>
                 </Grid>
             </FormGroup>

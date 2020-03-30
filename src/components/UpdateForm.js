@@ -1,10 +1,11 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { employeeActions } from '../redux/actions/index'
-import { makeStyles, Modal, Backdrop, Fade, FormGroup, Grid, TextField, Typography, Switch, Button } from '@material-ui/core'
+import { makeStyles, Modal, Backdrop, Fade, FormGroup, Grid, TextField, Typography, Switch, Button, Snackbar } from '@material-ui/core'
 import { MuiPickersUtilsProvider, KeyboardDatePicker } from '@material-ui/pickers'
 import { useForm } from 'react-hook-form'
 import MomentUtils from '@date-io/moment'
+import Alert from '@material-ui/lab/Alert'
 
 const useStyles = makeStyles(theme => ({
     modal: {
@@ -30,6 +31,7 @@ const mapDispatchToProps = dispatch => {
 const UpdateForm = (props) => {
     const classes = useStyles()
     const { register, handleSubmit, watch, errors } = useForm()
+    const errorsArray = Object.values(errors).map(error => error.message)
 
     const [state, setState] = React.useState({
         id: props.employee.id,
@@ -39,7 +41,12 @@ const UpdateForm = (props) => {
         birthDate: props.employee.birthDate,
         startDate: props.employee.startDate,
         status: props.employee.status,
+        sbOpen: true
     })
+
+    React.useEffect(() => {
+        setState({ sbOpen: true })
+    }, [errors])
 
     const handleChange = (event) => {
         setState({ ...state, [event.target.id]: event.target.value })
@@ -59,6 +66,17 @@ const UpdateForm = (props) => {
     
     const handleToggle = (event) => {
         setState({ ...state, status: event.target.checked })
+    }
+
+    const handleSnackbar = (errors) => (
+        Object.values(errors).map(error => <div>{error.message}</div>)
+    )
+    
+    const handleSBClose = (event, reason) => {
+        if (reason === 'clickaway') {
+            return
+        }
+        setState({ ...state, sbOpen: false })
     }
 
     const handleUpdateSubmit = () => {
@@ -102,7 +120,23 @@ const UpdateForm = (props) => {
                     <Grid container justify='space-evenly' style={{ width: '80%', margin: 'auto'}}>
                         <TextField 
                             error={ errors.firstName ? true : false }
-                            inputRef={ register({ required: true, maxLength: 50, minLength: 1 })} 
+                            inputRef={ 
+                                register({ 
+                                    required: 'First Name Required', 
+                                    maxLength: {
+                                        value: 50,
+                                        message: 'First Name must be less than 50 characters'
+                                    },
+                                    minLength: {
+                                        value: 1,
+                                        message: 'First Name must be at least 1 letter'
+                                    },
+                                    pattern: {
+                                        value: /[a-zA-Z]/,
+                                        message: 'First Name must only include letters'
+                                    }
+                                })
+                            } 
                             onChange={handleChange} 
                             required 
                             name='firstName'
@@ -114,7 +148,15 @@ const UpdateForm = (props) => {
                         />
                         <TextField 
                             error={ errors.middleInitial ? true : false }
-                            inputRef={ register({ maxLength: 1 })} 
+                            inputRef={ 
+                                register({ 
+                                    maxLength: 1, 
+                                    pattern: {
+                                        value: /[a-z][A-Z]/, 
+                                        message: 'Middle Initial must be a letter'
+                                    } 
+                                })
+                            } 
                             onChange={handleChange} 
                             name='middleInitial'
                             id='middleInitial' 
@@ -125,7 +167,23 @@ const UpdateForm = (props) => {
                         />
                         <TextField 
                             error={ errors.lastName ? true : false }
-                            inputRef={ register({ required: true, maxLength: 50, minLength: 1 })} 
+                            inputRef={ 
+                                register({ 
+                                    required: 'Last Name Required', 
+                                    maxLength: {
+                                        value: 50, 
+                                        message: 'Last Name must be less than 50 characters'
+                                    },
+                                    minLength: {
+                                        value: 1,
+                                        message: 'Last Name must be at least 1 letter'
+                                    },
+                                    pattern: {
+                                        value: /[a-z][A-Z]/, 
+                                        message: 'Last Name must only include letters'
+                                    } 
+                                })
+                            }
                             onChange={handleChange} 
                             required 
                             name='lastName'
@@ -171,6 +229,21 @@ const UpdateForm = (props) => {
                         </MuiPickersUtilsProvider>
                     </Grid>
                 </FormGroup>
+                {errorsArray.length > 0
+                    ?   <Snackbar 
+                            open={state.sbOpen}
+                            autoHideDuration={3000} 
+                            onClose={handleSBClose}
+                            anchorOrigin={{ vertical: 'top', horizontal: 'left' }}
+                        >
+                            <Alert severity="error">
+                                <div style={{ display: 'flex', flexFlow: 'column', alignItems: 'center' }}>
+                                { handleSnackbar(errors) }
+                                </div>
+                            </Alert>
+                        </Snackbar>
+                    : null
+                }
             </div>
         </Fade>
     </Modal>
