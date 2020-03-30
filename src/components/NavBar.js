@@ -1,5 +1,6 @@
 import React from 'react'
-import { makeStyles, ThemeProvider, createMuiTheme, AppBar, Typography, Button, Toolbar, TextField, Grid, Input } from '@material-ui/core'
+import { makeStyles, ThemeProvider, createMuiTheme, AppBar, Typography, Button, Toolbar, TextField, Grid, Snackbar } from '@material-ui/core'
+import MuiAlert from '@material-ui/lab/Alert';
 import { connect } from 'react-redux'
 import { signup, signin, signout } from '../redux/actions/auth'
 
@@ -31,14 +32,21 @@ const theme = createMuiTheme({
     },
   })
 
+function Alert(props) {
+    return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
+  
+
 const NavBar = ({ signup, signin, signout, auth, authMsg }) => {
     const classes = useStyles()
     const { register, handleSubmit, errors } = useForm()
-
+    let errorsArray = Object.values(errors)
+    debugger
     const [state, setState] = React.useState({
         email: '',
         password: '',
-        newUser: false
+        newUser: false,
+        sbOpen: true
     })
 
     React.useEffect(() => {
@@ -67,6 +75,17 @@ const NavBar = ({ signup, signin, signout, auth, authMsg }) => {
         setState({ ...state, [event.target.id]: event.target.value })
     }
 
+    const handleSnackbar = (errors) => (
+        Object.values(errors).map(error => <div>{error.message}</div>)
+    )
+    
+    const handleSBClose = (event, reason) => {
+        if (reason === 'clickaway') {
+            return
+        }
+        setState({ ...state, sbOpen: false })
+    }
+
     return (
         <div className={classes.appBar}>
             <ThemeProvider theme={theme}>
@@ -86,7 +105,15 @@ const NavBar = ({ signup, signin, signout, auth, authMsg }) => {
                                     <TextField 
                                         error={ errors.email ? true : false } 
                                         className={classes.textField} 
-                                        inputRef={ register({ required: true, maxLength: 50 })} 
+                                        inputRef={ 
+                                            register({ 
+                                                required: "Email is Required", 
+                                                maxLength: { 
+                                                    value: 50, 
+                                                    message: 'Email must be less than 50 characters'
+                                                } 
+                                            })
+                                        } 
                                         onChange={ handleChange } 
                                         name='email' 
                                         id='email' 
@@ -96,7 +123,15 @@ const NavBar = ({ signup, signin, signout, auth, authMsg }) => {
                                     <TextField 
                                         error={ errors.password ? true : false } 
                                         className={classes.textField} 
-                                        inputRef={ register({ required: true, maxLength: 20 })}
+                                        inputRef={ 
+                                            register({ 
+                                                required: "Password Required", 
+                                                maxLength: { 
+                                                    value: 20,
+                                                    message: "Password must be less than 20 characters"
+                                                }
+                                            })
+                                        }
                                         onChange={handleChange} 
                                         name='password'
                                         id='password' 
@@ -113,6 +148,22 @@ const NavBar = ({ signup, signin, signout, auth, authMsg }) => {
                                 </>
                             }
                         </Grid>
+                        {errorsArray.length > 0
+                            ?   <Snackbar 
+                                    open={state.sbOpen}
+                                    autoHideDuration={4000} 
+                                    onClose={handleSBClose}
+                                    anchorOrigin={{ vertical: 'top', horizontal: 'left' }}
+                                >
+                                    <Alert onClose={handleSBClose} severity="error">
+                                        <div style={{ display: 'flex', flexFlow: 'column', alignItems: 'center' }}>
+                                        { handleSnackbar(errors) }
+                                        </div>
+                                    </Alert>
+                                </Snackbar>
+                            : null
+                        }
+                        
                     </Toolbar>
                 </AppBar>
             </ThemeProvider>
