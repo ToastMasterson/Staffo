@@ -1,4 +1,4 @@
-import { SIGNUP_SUCCESS, SIGNUP_ERROR, SIGNIN_ERROR, SIGNIN_SUCCESS, SIGNOUT_ERROR, SIGNOUT_SUCCESS } from '../constants/action-types'
+import { SIGNUP_SUCCESS, SIGNUP_ERROR, SIGNIN_PENDING, SIGNIN_ERROR, SIGNIN_SUCCESS, SIGNOUT_PENDING, SIGNOUT_ERROR, SIGNOUT_SUCCESS, SIGNUP_PENDING } from '../constants/action-types'
 
 import firebase from '../../firebase'
 
@@ -43,7 +43,6 @@ export const signin = (email, password, callback) => async dispatch => {
             .signInWithEmailAndPassword(email, password)
             .then(() => {
                 dispatch({ type: SIGNIN_SUCCESS })
-                callback()
             })
             .catch(() => {
                 dispatch({
@@ -54,7 +53,7 @@ export const signin = (email, password, callback) => async dispatch => {
         } catch (err) {
             dispatch({ type: SIGNIN_ERROR, payload: "Invalid login credentials" })
         }
-    }
+}
 
 export const signout = () => async dispatch => {
     try {
@@ -67,7 +66,7 @@ export const signout = () => async dispatch => {
             .catch(() => {
                 dispatch({ 
                     type: SIGNOUT_ERROR, 
-                    payload: "...some error message for the user..."
+                    payload: "There was an issue signing out."
                 })
             })
         } catch (err) {

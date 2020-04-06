@@ -15,7 +15,7 @@ function mapDispatchToProps(dispatch) {
 }
 
 const ConnectedForm = (props) => {
-    const { register, handleSubmit, watch, errors } = useForm()
+    const { register, handleSubmit, errors } = useForm()
     const errorsArray = Object.values(errors).map(error => error.message)
     const [state, setState] = React.useState({
         firstName: '',

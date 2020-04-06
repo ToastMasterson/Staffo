@@ -30,7 +30,7 @@ const mapDispatchToProps = dispatch => {
 
 const UpdateForm = (props) => {
     const classes = useStyles()
-    const { register, handleSubmit, watch, errors } = useForm()
+    const { register, handleSubmit, errors } = useForm()
     const errorsArray = Object.values(errors).map(error => error.message)
 
     const [state, setState] = React.useState({
