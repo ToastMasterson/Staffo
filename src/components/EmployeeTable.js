@@ -1,11 +1,12 @@
 import React, { Component } from 'react'
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@material-ui/core'
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Snackbar } from '@material-ui/core'
 import { connect } from 'react-redux'
 import { employeeActions } from '../redux/actions/index'
 import Spinner from './Spinner'
-
+import Alert from '@material-ui/lab/Alert'
 
 class EmployeeTable extends Component {
+
     componentWillMount(){
         this.props.dispatch(employeeActions.fetchEmployees())
     }
@@ -13,6 +14,13 @@ class EmployeeTable extends Component {
     fullName = (employee) => (
         employee.firstName + ' ' + employee.middleInitial + ' ' + employee.lastName
     )
+
+    handleSBClose = (event, reason) => {
+        if (reason === 'clickaway') {
+            return
+        }
+        this.setState({ sbOpen: false })
+    }
 
     populateTable = (employees, pending) => {
         return pending
@@ -42,7 +50,7 @@ class EmployeeTable extends Component {
     }
 
     render() {
-        const { error, pending, employees } = this.props
+        const { error, pending, employees, message } = this.props
 
         if (error) {
             return <div>Error! {error.message}</div>
@@ -72,6 +80,22 @@ class EmployeeTable extends Component {
                         </TableBody>
                     </Table>
                 </TableContainer>
+                {message !== ""
+                    ? 
+                        <Snackbar 
+                            open={this.state.sbOpen}
+                            autoHideDuration={3000} 
+                            onClose={this.handleSBClose}
+                            anchorOrigin={{ vertical: 'top', horizontal: 'left' }}
+                        >
+                            <Alert severity="error">
+                                <div style={{ display: 'flex', flexFlow: 'column', alignItems: 'center' }}>
+                                    {message}
+                                </div>
+                            </Alert>
+                        </Snackbar>
+                    : null
+                }
             </div>
         )
     }
@@ -80,7 +104,8 @@ class EmployeeTable extends Component {
 const mapStateToProps = state => ({
     employees: state.employees.employees,
     pending: state.employees.pending,
-    error: state.employees.error
+    error: state.employees.error,
+    message: state.employees.message
 })
 
 

@@ -56,7 +56,7 @@ const App = ( { auth, authMsg }) => {
         <NavBar />
         {!auth.isEmpty 
           ? <><Options showAddForm={showAddForm} showActiveOnly={showActiveOnly} />
-            { state.showAddForm ? <Form /> : null }
+            { state.showAddForm ? <Form toggle={showAddForm} /> : null }
             <EmployeeTable showUpdateForm={showUpdateForm} activeOnly={state.showActiveOnly} />
             { state.showUpdateForm 
               ? <UpdateForm 

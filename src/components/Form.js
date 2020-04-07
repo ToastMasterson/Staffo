@@ -29,7 +29,7 @@ const ConnectedForm = (props) => {
     })
 
     React.useEffect(() => {
-        setState({ sbOpen: true })
+        setState({...state, sbOpen: true })
     }, [errors])
 
     const handleChange = (event) => {
@@ -123,7 +123,7 @@ const ConnectedForm = (props) => {
                             register({ 
                                 maxLength: 1, 
                                 pattern: {
-                                    value: /[a-z][A-Z]/, 
+                                    value: /[a-zA-Z]/, 
                                     message: 'Middle Initial must be a letter'
                                 } 
                             })
@@ -150,7 +150,7 @@ const ConnectedForm = (props) => {
                                     message: 'Last Name must be at least 1 letter'
                                 },
                                 pattern: {
-                                    value: /[a-z][A-Z]/, 
+                                    value: /[a-zA-Z]/, 
                                     message: 'Last Name must only include letters'
                                 } 
                         })

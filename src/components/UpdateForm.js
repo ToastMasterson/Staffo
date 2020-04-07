@@ -45,7 +45,7 @@ const UpdateForm = (props) => {
     })
 
     React.useEffect(() => {
-        setState({ sbOpen: true })
+        setState({ ...state, sbOpen: true })
     }, [errors])
 
     const handleChange = (event) => {
@@ -98,7 +98,6 @@ const UpdateForm = (props) => {
             startDate: startDate,
             status: status
          })
-
         props.toggle()
     }
 
@@ -152,7 +151,7 @@ const UpdateForm = (props) => {
                                 register({ 
                                     maxLength: 1, 
                                     pattern: {
-                                        value: /[a-z][A-Z]/, 
+                                        value: /[a-zA-Z]/, 
                                         message: 'Middle Initial must be a letter'
                                     } 
                                 })
@@ -179,7 +178,7 @@ const UpdateForm = (props) => {
                                         message: 'Last Name must be at least 1 letter'
                                     },
                                     pattern: {
-                                        value: /[a-z][A-Z]/, 
+                                        value: /[a-zA-Z]/, 
                                         message: 'Last Name must only include letters'
                                     } 
                                 })
@@ -201,7 +200,7 @@ const UpdateForm = (props) => {
                                 id="birthDate"
                                 label="Date of Birth"
                                 format="MM/DD/YYYY"
-                                value={props.employee.birthDate}
+                                value={state.birthDate}
                                 onChange={handleBirthDateChange}
                                 KeyboardButtonProps={{
                                   'aria-label': 'change date',
@@ -214,7 +213,7 @@ const UpdateForm = (props) => {
                                 id="startDate"
                                 label="Date of Employment"
                                 format="MM/DD/YYYY"
-                                value={props.employee.startDate}
+                                value={state.startDate}
                                 onChange={handleStartDateChange}
                                 KeyboardButtonProps={{
                                   'aria-label': 'change date',

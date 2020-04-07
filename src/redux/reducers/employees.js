@@ -3,7 +3,8 @@ import { FETCH_EMPLOYEES_ERROR, FETCH_EMPLOYEES_SUCCESS, FETCH_EMPLOYEES_PENDING
 const initialState = {
     pending: true,
     employees: [],
-    error: null
+    error: null,
+    message: ""
 }
 
 export default function employees(state = initialState, action) {
@@ -21,11 +22,13 @@ export default function employees(state = initialState, action) {
         case ADD_EMPLOYEE:
             const newEmployee = {...action.employee}
             return Object.assign({}, state, {
-                employees: state.employees.concat(newEmployee)
+                employees: state.employees.concat(newEmployee),
+                message: "Employee Successfully Added"
             })
         case UPDATE_EMPLOYEE:
             return Object.assign({}, state, {
-                employees: state.employees.map(employee => employee.id === action.employee.id ? {...action.employee}:employee)
+                employees: state.employees.map(employee => employee.id === action.employee.id ? {...action.employee}:employee),
+                message: "Employee Successfully Updated"
             })
         default:
             return state
